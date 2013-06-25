@@ -1,8 +1,10 @@
+require 'json'
+
 module IMS::LTI
   # Class for implementing an LTI Tool Consumer
   class ToolConsumer
     include IMS::LTI::Extensions::Base
-    include IMS::LTI::LaunchParams
+    include IMS::LTI::Params
     include IMS::LTI::RequestValidator
 
     attr_accessor :consumer_key, :consumer_secret, :launch_url, :timestamp, :nonce
@@ -15,11 +17,8 @@ module IMS::LTI
     def initialize(consumer_key, consumer_secret, params={})
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
-      @custom_params = {}
-      @ext_params = {}
-      @non_spec_params = {}
       @launch_url = params['launch_url']
-      process_params(params)
+      self.params = params
     end
     
     def process_post_request(post_request)
@@ -42,54 +41,31 @@ module IMS::LTI
       @consumer_key && @consumer_secret && @resource_link_id && @launch_url
     end
 
-    # Generate the launch data including the necessary OAuth information
+    # [Deprecated] Convenience method for generating the params for a
+    # basic-lti-launch-request.
     #
-    #
+    # Use generateBasicLtiLaunchRequest to create a request, and get the
+    # params from the request object instead.
     def generate_launch_data
-      raise IMS::LTI::InvalidLTIConfigError, "Not all required params set for tool launch" unless has_required_params?
-
-      params = self.to_params
-      params['lti_version'] ||= 'LTI-1p0'
-      params['lti_message_type'] ||= 'basic-lti-launch-request'
-      uri = URI.parse(@launch_url)
-
-      if uri.port == uri.default_port
-        host = uri.host
-      else
-        host = "#{uri.host}:#{uri.port}"
-      end
-
-      consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, {
-              :site => "#{uri.scheme}://#{host}",
-              :signature_method => "HMAC-SHA1"
-      })
-
-      path = uri.path
-      path = '/' if path.empty?
-      if uri.query && uri.query != ''
-        CGI.parse(uri.query).each do |query_key, query_values|
-          unless params[query_key]
-            params[query_key] = query_values.first
-          end
-        end
-      end
-      options = {
-              :scheme => 'body',
-              :timestamp => @timestamp,
-              :nonce => @nonce
-      }
-      request = consumer.create_signed_request(:post, path, nil, options, params)
-
-      # the request is made by a html form in the user's browser, so we
-      # want to revert the escapage and return the hash of post parameters ready
-      # for embedding in a html view
-      hash = {}
-      request.body.split(/&/).each do |param|
-        key, val = param.split(/=/).map { |v| CGI.unescape(v) }
-        hash[key] = val
-      end
-      hash
+      generateBasicLtiLaunchRequest.generate_launch_data
     end
 
+    def profile_json
+      {
+          :@context => {},
+          :@type => "ToolConsumerProfile",
+          :@id => "Someid",
+          :lti_version => lti_version,
+          :guid => 'someguid',
+          :product_instance => {
+              :guid => 'someid',
+              :product_info => {},
+              :support => {},
+              :service_provider => {},
+          },
+          :capability_offered => [],
+          :service_offered => []
+      }
+    end
   end
 end

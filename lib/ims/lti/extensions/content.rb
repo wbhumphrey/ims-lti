@@ -27,7 +27,7 @@ module IMS::LTI
         def accepted_content_types
           return @content_types if @content_types
           @content_types = []
-          if val = @ext_params["content_return_types"]
+          if val = get_ext_param("content_return_types")
             @content_types = val.split(',').map {|i| i.to_sym}
           end
 
@@ -37,7 +37,7 @@ module IMS::LTI
         def accepted_file_extensions
           return @file_extensions if @file_extensions
           @file_extensions = []
-          if val = @ext_params["content_file_extensions"]
+          if val = get_ext_param("content_file_extensions")
             @file_extensions = val.split(',').map {|i| i.downcase.strip}
           end
 
@@ -72,12 +72,12 @@ module IMS::LTI
         end
 
         def content_intended_use
-          @ext_params["content_intended_use"].to_sym if  @ext_params["content_intended_use"]
+          get_ext_param("content_intended_use").to_sym if get_ext_param("content_intended_use")
         end
 
         # check if the content extension is supported
         def accepts_content?
-          !!@ext_params["content_return_types"]
+          !!get_ext_param("content_return_types")
         end
 
         # check if the consumer accepts a given type of content
@@ -91,7 +91,7 @@ module IMS::LTI
         end
 
         def content_return_url
-          @ext_params["content_return_url"]
+          get_ext_param("content_return_url")
         end
 
         #generates the return url for file submissions

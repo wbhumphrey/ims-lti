@@ -135,7 +135,7 @@ module IMS::LTI
     # will be pulled from the provided Hash
     def process_params(params)
       params.each_pair do |key, val|
-        if LAUNCH_DATA_PARAMETERS.member?(key)
+        if accepted_parameters.member?(key)
           self.send("#{key}=", val)
         elsif key =~ /custom_(.*)/
           @custom_params[$1] = val
@@ -145,10 +145,14 @@ module IMS::LTI
       end
     end
 
+    def accepted_parameters
+      LAUNCH_DATA_PARAMETERS
+    end
+
     private
 
     def launch_data_hash
-      LAUNCH_DATA_PARAMETERS.inject({}) { |h, k| h[k] = self.send(k) if self.send(k); h }
+      accepted_parameters.inject({}) { |h, k| h[k] = self.send(k) if self.send(k); h }
     end
 
     def add_key_prefix(hash, prefix)

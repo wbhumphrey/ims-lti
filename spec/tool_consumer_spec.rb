@@ -26,14 +26,14 @@ describe IMS::LTI::ToolConsumer do
   it "should generate a correct signature" do
     create_tc
     res = @tc.generate_launch_data
-    res['oauth_signature'].should eql('Eh+W+ZMn4CB9momDqyJXf5yMfTc=')
+    res['oauth_signature'].should eql('4vrmS6u8oHmMeT3gN1YZQ2dyH50=')
   end
 
   it "should generate a correct signature with URL query parameters" do
     create_tc
     @tc.launch_url = 'http://dr-chuck.com/ims/php-simple/tool.php?a=1&b=2&c=3%20%26a'
     res = @tc.generate_launch_data
-    res['oauth_signature'].should eql('iN1kwF7CYLWi0BJCo3G7rlGHTm8=')
+    res['oauth_signature'].should eql('zcZGAmiSibF10VQhrBa2jfzE0mM=')
     res['c'].should == "3 &a"
   end
 
@@ -49,14 +49,23 @@ describe IMS::LTI::ToolConsumer do
 
     # signatures generated using http://oauth.googlecode.com/svn/code/javascript/example/signature.html
     # accessed on : 2013-06-24
-    test_url('http://dr-chuck.com:123/ims/php-simple/tool.php', 'dG1tuMWpQw2Tg/aM1RLL/+o11rE=')
-    test_url('http://dr-chuck.com/ims/php-simple/tool.php', '5/m7IyWjp5mzc98CtyagO4lZj2A=')
-    test_url('http://dr-chuck.com:80/ims/php-simple/tool.php', '5/m7IyWjp5mzc98CtyagO4lZj2A=')
-    test_url('http://dr-chuck.com:443/ims/php-simple/tool.php', '3UGVtB8kHe3O0A9cW1XSNhYcG/E=')
-    test_url('https://dr-chuck.com/ims/php-simple/tool.php', 'ZoR3mXQgkd5JNY6T47CeNdvIgy8=')
-    test_url('https://dr-chuck.com:443/ims/php-simple/tool.php', 'ZoR3mXQgkd5JNY6T47CeNdvIgy8=')
-    test_url('https://dr-chuck.com:80/ims/php-simple/tool.php', 'dLmHNc5t74KTIr5uqQ85E2O3N9w=')
-    test_url('https://dr-chuck.com:80/ims/php-simple/tool.php?oi=hoyt', '3gwTnBk87PzT8GWIJFxvnCxZNmU=')
+    #test_url('http://dr-chuck.com:123/ims/php-simple/tool.php', 'dG1tuMWpQw2Tg/aM1RLL/+o11rE=')
+    #test_url('http://dr-chuck.com/ims/php-simple/tool.php', '5/m7IyWjp5mzc98CtyagO4lZj2A=')
+    #test_url('http://dr-chuck.com:80/ims/php-simple/tool.php', '5/m7IyWjp5mzc98CtyagO4lZj2A=')
+    #test_url('http://dr-chuck.com:443/ims/php-simple/tool.php', '3UGVtB8kHe3O0A9cW1XSNhYcG/E=')
+    #test_url('https://dr-chuck.com/ims/php-simple/tool.php', 'ZoR3mXQgkd5JNY6T47CeNdvIgy8=')
+    #test_url('https://dr-chuck.com:443/ims/php-simple/tool.php', 'ZoR3mXQgkd5JNY6T47CeNdvIgy8=')
+    #test_url('https://dr-chuck.com:80/ims/php-simple/tool.php', 'dLmHNc5t74KTIr5uqQ85E2O3N9w=')
+    #test_url('https://dr-chuck.com:80/ims/php-simple/tool.php?oi=hoyt', '3gwTnBk87PzT8GWIJFxvnCxZNmU=')
+
+    test_url('http://dr-chuck.com:123/ims/php-simple/tool.php', '+d2FzHzwxLTWpqE1eC0ub336Lik=')
+    test_url('http://dr-chuck.com/ims/php-simple/tool.php', 'C54TSCFSu9MRYOhJ2cqNF4qlDxw=')
+    test_url('http://dr-chuck.com:80/ims/php-simple/tool.php', 'C54TSCFSu9MRYOhJ2cqNF4qlDxw=')
+    test_url('http://dr-chuck.com:443/ims/php-simple/tool.php', '/b5II+ekIyg7J4EN5vUcOYX6FTU=')
+    test_url('https://dr-chuck.com/ims/php-simple/tool.php', 'q34SBQnYTHjWijMcovRfaC9zmhE=')
+    test_url('https://dr-chuck.com:443/ims/php-simple/tool.php', 'q34SBQnYTHjWijMcovRfaC9zmhE=')
+    test_url('https://dr-chuck.com:80/ims/php-simple/tool.php', 'WBxH7fHpdV8KlYcGeiql0b0Cfn8=')
+    test_url('https://dr-chuck.com:80/ims/php-simple/tool.php?oi=hoyt', 'oc/4kg9cJq5IsvvyTjgW3vTqqMw=')
   end
 
   it "should include URI query parameters" do

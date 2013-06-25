@@ -35,7 +35,7 @@ module IMS::LTI
 
   class ToolProvider
     include IMS::LTI::Extensions::Base
-    include IMS::LTI::LaunchParams
+    include IMS::LTI::Params
     include IMS::LTI::RequestValidator
 
     # OAuth credentials
@@ -53,17 +53,14 @@ module IMS::LTI
     def initialize(consumer_key, consumer_secret, params={})
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
-      @custom_params = {}
-      @ext_params = {}
-      @non_spec_params = {}
       @outcome_requests = []
-      process_params(params)
+      self.params = params
     end
 
     # Check whether the Launch Parameters have a role
     def has_role?(role)
       role = role.downcase
-      @roles && @roles.any?{|r| r.index(role)}
+      roles.any?{|r| r.index(role)}
     end
 
     # Convenience method for checking if the user has 'learner' or 'student' role

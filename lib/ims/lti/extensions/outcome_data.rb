@@ -45,7 +45,7 @@ module IMS::LTI
         def accepted_outcome_types
           return @outcome_types if @outcome_types
           @outcome_types = []
-          if val = @ext_params["outcome_data_values_accepted"]
+          if val = get_ext_param("outcome_data_values_accepted")
             @outcome_types = val.split(',')
           end
 
@@ -54,7 +54,7 @@ module IMS::LTI
 
         # check if the outcome data extension is supported
         def accepts_outcome_data?
-          !!@ext_params["outcome_data_values_accepted"]
+          !!get_ext_param("outcome_data_values_accepted")
         end
 
         # check if the consumer accepts text as outcome data

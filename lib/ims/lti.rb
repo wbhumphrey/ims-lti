@@ -42,9 +42,11 @@ end
 
 require 'ims/lti/extensions'
 require 'ims/lti/launch_params'
+require 'ims/lti/params'
 require 'ims/lti/request_validator'
 require 'ims/lti/tool_provider'
 require 'ims/lti/tool_consumer'
 require 'ims/lti/outcome_request'
 require 'ims/lti/outcome_response'
 require 'ims/lti/tool_config'
+require 'ims/lti/messages'

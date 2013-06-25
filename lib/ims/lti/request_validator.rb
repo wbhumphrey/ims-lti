@@ -4,7 +4,7 @@ module IMS::LTI
 
     attr_reader :oauth_signature_validator
 
-    # Validates and OAuth request using the OAuth Gem - https://github.com/oauth/oauth-ruby
+    # Validates an OAuth request using the OAuth Gem - https://github.com/oauth/oauth-ruby
     #
     # To validate the OAuth signatures you need to require the appropriate
     # request proxy for your application. For example:
