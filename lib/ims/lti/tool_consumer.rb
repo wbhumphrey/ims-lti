@@ -50,22 +50,11 @@ module IMS::LTI
       generateBasicLtiLaunchRequest.generate_launch_data
     end
 
-    def profile_json
-      {
-          :@context => {},
-          :@type => "ToolConsumerProfile",
-          :@id => "Someid",
-          :lti_version => lti_version,
-          :guid => 'someguid',
-          :product_instance => {
-              :guid => 'someid',
-              :product_info => {},
-              :support => {},
-              :service_provider => {},
-          },
-          :capability_offered => [],
-          :service_offered => []
-      }
+    def generate_profile
+      profile = IMS::LTI::Models::ToolConsumerProfile.new('')
+      profile.product_instance = IMS::LTI::Models::ProductInstance.new('')
+
+
     end
   end
 end
